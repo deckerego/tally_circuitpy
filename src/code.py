@@ -5,6 +5,13 @@ import ampule
 import light
 import led
 
+headers = {
+    "Content-Type": "application/json; charset=UTF-8",
+    "Access-Control-Allow-Origin": '*',
+    "Access-Control-Allow-Methods": 'GET, POST',
+    "Access-Control-Allow-Headers": 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+}
+
 @ampule.route("/set")
 def light_set(request):
     (method, path, params, headers, data) = request
@@ -20,14 +27,14 @@ def light_set(request):
     light.goToColor(red, green, blue)
 
     body = _to_json(red, green, blue, brightness)
-    return (200, {"Content-Type": "application/json; charset=UTF-8"}, body)
+    return (200, headers, body)
 
 @ampule.route("/status")
 def light_status(request):
     red, green, blue = light.getColor()
     brightness = light.getBrightness()
     body = _to_json(red, green, blue, brightness)
-    return (200, {"Content-Type": "application/json; charset=UTF-8"}, body)
+    return (200, headers, body)
 
 def _to_json(r, g, b, bright):
     hostname = secrets["hostname"] if "hostname" in secrets else wifi.radio.hostname
