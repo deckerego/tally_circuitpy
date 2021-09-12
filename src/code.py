@@ -11,10 +11,6 @@ except ImportError:
     print("WiFi secrets not found in secrets.py")
     raise
 
-led = DigitalInOut(board.LED)
-led.direction = Direction.OUTPUT
-led.value = True;
-
 print("Connecting to %s..." % secrets["ssid"])
 print("MAC: ", [hex(i) for i in wifi.radio.mac_address])
 wifi.radio.connect(secrets["ssid"], secrets["password"])
@@ -22,7 +18,7 @@ wifi.radio.connect(secrets["ssid"], secrets["password"])
 pool = socketpool.SocketPool(wifi.radio)
 socket = pool.socket()
 socket.bind(['0.0.0.0', 7413])
-socket.listen(1)
+socket.listen(5)
 print("Connected to %s, IPv4 Addr: " % secrets["ssid"], wifi.radio.ipv4_address)
 
 def _to_json(r, g, b, bright):
@@ -53,6 +49,6 @@ def light_status(request):
     body = _to_json(red, green, blue, brightness)
     return (200, {"Content-Type": "application/json; charset=UTF-8"}, body)
 
-#light.test()
+light.test()
 while True:
     ampule.listen(socket)
