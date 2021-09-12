@@ -1,29 +1,9 @@
 import board
 import wifi
 import socketpool
-from digitalio import DigitalInOut, Direction
 import ampule
 import light
-
-try:
-    from secrets import secrets
-except ImportError:
-    print("WiFi secrets not found in secrets.py")
-    raise
-
-print("Connecting to %s..." % secrets["ssid"])
-print("MAC: ", [hex(i) for i in wifi.radio.mac_address])
-wifi.radio.connect(secrets["ssid"], secrets["password"])
-
-pool = socketpool.SocketPool(wifi.radio)
-socket = pool.socket()
-socket.bind(['0.0.0.0', 7413])
-socket.listen(5)
-print("Connected to %s, IPv4 Addr: " % secrets["ssid"], wifi.radio.ipv4_address)
-
-def _to_json(r, g, b, bright):
-    hostname = secrets["hostname"] if "hostname" in secrets else wifi.radio.hostname
-    return '{ "hostname": "%s", "red": %i, "green": %i, "blue": %i, "brightness": %f }' % (hostname, r, g, b, bright)
+import led
 
 @ampule.route("/set")
 def light_set(request):
@@ -49,6 +29,40 @@ def light_status(request):
     body = _to_json(red, green, blue, brightness)
     return (200, {"Content-Type": "application/json; charset=UTF-8"}, body)
 
+def _to_json(r, g, b, bright):
+    hostname = secrets["hostname"] if "hostname" in secrets else wifi.radio.hostname
+    return '{ "hostname": "%s", "red": %i, "green": %i, "blue": %i, "brightness": %f }' % (hostname, r, g, b, bright)
+
+
+### BEGIN Initialize Tally Light
+
+led.on()
+
+try:
+    from secrets import secrets
+except ImportError:
+    print("WiFi secrets not found in secrets.py")
+    led.blink(0.25)
+    raise
+
+try:
+    print("Connecting to %s..." % secrets["ssid"])
+    print("MAC: ", [hex(i) for i in wifi.radio.mac_address])
+    wifi.radio.connect(secrets["ssid"], secrets["password"])
+except:
+    print("Error connecting to WiFi")
+    led.blink(0.1)
+    raise
+
+led.off()
+pool = socketpool.SocketPool(wifi.radio)
+socket = pool.socket()
+socket.bind(['0.0.0.0', 7413])
+socket.listen(5)
+print("Connected to %s, IPv4 Addr: " % secrets["ssid"], wifi.radio.ipv4_address)
+
+led.on()
 light.test()
+
 while True:
     ampule.listen(socket)
