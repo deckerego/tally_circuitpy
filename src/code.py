@@ -14,9 +14,8 @@ headers = {
 
 @ampule.route("/set")
 def light_set(request):
-    (method, path, params, headers, data) = request
-    color_hex = params["color"]
-    bright_pct = params["brightness"]
+    color_hex = request.params["color"]
+    bright_pct = request.params["brightness"]
 
     red = int(color_hex[0:2], 16)
     green = int(color_hex[2:4], 16)
