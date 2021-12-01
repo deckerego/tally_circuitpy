@@ -1,6 +1,9 @@
+import settings
 import neopixel
 import board
 import time
+
+max_brightness = settings.conf['max_brightness']
 
 pixel_pin = board.NEOPIXEL
 pixel_num = 50
@@ -16,13 +19,13 @@ def getColor():
     return pixels[0]
 
 def setBrightness(percent):
-    brightness = validateBrightness(percent)
+    brightness = validateBrightness(percent) * max_brightness
     pixels.brightness = brightness
     pixels.show()
     return getBrightness()
 
 def getBrightness():
-    return pixels.brightness
+    return pixels.brightness / max_brightness
 
 def shutdown():
     setColor(0, 0, 0)

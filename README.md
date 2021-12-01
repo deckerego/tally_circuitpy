@@ -4,6 +4,7 @@ A network controlled tally light for cameras, intended for control by
 [TallyOBS](https://github.com/deckerego/tally_obs)
 but extensible enough to use for whatever purposes you like.
 
+
 ## Installing
 
 When installing for the first time, extract the latest
@@ -13,21 +14,29 @@ into the CIRCUITPY drive that appears when you plug in your Macropad.
 Ensure that the contents of the `lib/` subdirectory are also copied - these are
 the precompiled Adafruit libraries that power the Macropad.
 
-Once the files have been copied over, update the `secrets.py` file in the
-CIRCUITPY drive to contain your WiFi SSID and PSK. If the activity LED
-blinks rapidly, that indicates your tally light cannot connect to WiFi.
-Double-check that you have a valid SSID and PSK for a 2.4GHz WiFi network
-specified in `secrets.py`.
-
-
-## Required Libraries
-
 tally_circuitpy requires CircuitPython 7.0, which can be downloaded at
 https://circuitpython.org/downloads and can be flashed according to your
 board's instructions. Many ESP32-S2 boards follow similar ESPTool instructions as listed
 [on Adafruit's Metro ESP32-S2](https://learn.adafruit.com/adafruit-metro-esp32-s2/rom-bootloader)
 learn page. If you are flashing with the ESPTool, make sure to flash with the
 `.bin` file (_not_ the `.uf2` file).
+
+
+## Configuration
+
+Once the files have been copied over, update the `secrets.py` file in the
+CIRCUITPY drive to contain your WiFi SSID and PSK. If the activity LED
+blinks rapidly, that indicates your tally light cannot connect to WiFi.
+Double-check that you have a valid SSID and PSK for a 2.4GHz WiFi network
+specified in `secrets.py`.
+
+Configuration settings are stored in the `settings.py` file, including the
+maximum LED brightness allowed. Some devices cannot run at over 50% brightness
+without heat sinks, and so a max value can be enforced so
+devices will not overheat.
+
+
+## Required Libraries
 
 All required libraries are supplied through the release .ZIP files. If you want
 to install directly from the repository, you will need the
