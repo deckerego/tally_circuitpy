@@ -12,6 +12,13 @@ headers = {
     "Access-Control-Allow-Headers": 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 }
 
+@ampule.route("/dashboard")
+def dashboard(request):
+    document = ''
+    with open("/dashboard.html", "r") as reader:
+        document += reader.read()
+    return (200, {"Content-Type": "text/html; charset=utf-8"}, document)
+
 @ampule.route("/set")
 def light_set(request):
     color_hex = request.params["color"]
