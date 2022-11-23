@@ -72,3 +72,8 @@ Would set the NeoPixels to be purple across all LEDs, at 30% brightness.
 The status of the LEDs are available as:
 
     http://192.168.1.1:7413/status
+
+If you would like to tweak an individual light, an HTML dashboard for 
+controlling colors and brightness is available at:
+
+    http://192.168.1.1:7413/dashboard
